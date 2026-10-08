@@ -21,12 +21,10 @@ sim = rebound.Simulation()
 sim.integrator = "mercurius"
 sim.dt = 0.025 * 2.0 * np.pi  # we're working in units where 1 year = 2*pi
 sim.testparticle_type = 1
-sim.ri_ias15.min_dt = 1e-6  # ensure that close encounters do not stall the integration
 
 # collision and boundary options
 sim.collision = "direct"
 sim.collision_resolve = "merge"
-sim.collision_resolve_keep_sorted = 1
 sim.track_energy_offset = 1
 
 # Now that the setup is complete, it's time to add some particles! When using
@@ -98,17 +96,15 @@ while sim.N < (N_pl + sim.N_active):
 # before and after the simulation.
 
 sim.move_to_com()
-E0 = sim.calculate_energy()
+E0 = sim.energy()
 
 # Finally, let us simulate our system for 1 year, and check that our final
 # relative energy error is small.
 
 times = np.linspace(0.0, 10.0, 10)
-encounterN = np.zeros(len(times))
 totalN = np.zeros(len(times))
 errors = np.zeros(len(times))
 for i, t in enumerate(times):
     sim.integrate(t, exact_finish_time=0)
     totalN[i] = sim.N
-    encounterN[i] = sim.ri_mercurius._encounterN
-    errors[i] = abs((sim.calculate_energy() - E0) / E0)
+    errors[i] = abs((sim.energy() - E0) / E0)
