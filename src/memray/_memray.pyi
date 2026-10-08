@@ -247,7 +247,6 @@ class Tracker:
         follow_fork: bool = ...,
         trace_python_allocators: bool = ...,
         file_format: FileFormat = ...,
-        reference_tracking: bool = ...,
         track_object_lifetimes: bool = ...,
     ) -> None: ...
     @overload
@@ -260,7 +259,7 @@ class Tracker:
         follow_fork: bool = ...,
         trace_python_allocators: bool = ...,
         file_format: FileFormat = ...,
-        reference_tracking: bool = ...,
+        track_object_lifetimes: bool = ...,
     ) -> None: ...
     def __enter__(self) -> Any: ...
     def __exit__(
