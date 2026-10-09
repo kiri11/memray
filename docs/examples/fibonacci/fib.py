@@ -17,7 +17,7 @@ def fib2(n, cache={0: 0, 1: 1}):
 
 def run():
     sys.setrecursionlimit(100000)
-    n = 99900
+    n = 10000
     a = fib1(n)
     b = fib2(n)
 

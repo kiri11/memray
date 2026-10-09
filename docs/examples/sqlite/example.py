@@ -54,7 +54,7 @@ def main():
         conn.execute(create_statement)
         conn.executemany(insert_statement, lst)
     results = conn.execute(select_statement).fetchall()
-    print(f"There are {len(results)} items in teh db")
+    print(f"There are {len(results)} items in the db")
 
 
 if __name__ == "__main__":

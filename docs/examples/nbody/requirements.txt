@@ -1,2 +1,2 @@
 numpy
-rebound
+rebound>=5
