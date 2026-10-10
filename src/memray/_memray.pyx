@@ -70,7 +70,6 @@ from libc.stdint cimport uintptr_t
 from libcpp cimport bool
 from libcpp.limits cimport numeric_limits
 from libcpp.memory cimport make_shared
-from libcpp.memory cimport make_unique
 from libcpp.memory cimport shared_ptr
 from libcpp.memory cimport unique_ptr
 from libcpp.string cimport string as cppstring
@@ -858,8 +857,13 @@ cdef class Tracker:
             orig_set_os_name = getattr(self._patched_thread_class, "_set_os_name", None)
             if orig_set_os_name is not None:
                 def set_os_name_wrapper(self):
-                    cdef unique_ptr[RecursionGuard] guard = make_unique[RecursionGuard]()
-                    orig_set_os_name(self)
+                    # Cython drops an unused RecursionGuard local, so set the flag directly.
+                    cdef bint was_locked = RecursionGuard.isActive()
+                    RecursionGuard.setValue(True)
+                    try:
+                        orig_set_os_name(self)
+                    finally:
+                        RecursionGuard.setValue(was_locked)
 
                 setattr(self._patched_thread_class, "_set_os_name", set_os_name_wrapper)
 

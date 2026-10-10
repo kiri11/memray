@@ -16,6 +16,10 @@ cdef extern from "tracking_api.h" namespace "memray::tracking_api":
 
     cdef cppclass RecursionGuard:
         RecursionGuard()
+        @staticmethod
+        bint isActive()
+        @staticmethod
+        void setValue(bint value)
 
     cdef cppclass Tracker:
         @staticmethod
